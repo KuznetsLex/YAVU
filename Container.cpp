@@ -1,5 +1,5 @@
 #include "Container.h"
-#include "Box.h"
+#include "BoxClass.h"
 #include <iostream>
 
 using std::cin;
@@ -10,14 +10,18 @@ using std::istream;
 using std::vector;
 
 
-BoxAndContainer::Container::Container(int length, int width, int height, double maxWeight) : length(length), width(width), height(height),
-                                                                 maxWeight(maxWeight) {}
+BoxAndContainer::Container::Container(int length, int width, int height, double maxWeight) : length(length),
+                                                                                             width(width),
+                                                                                             height(height),
+                                                                                             maxWeight(maxWeight) {
+    std::cout << "STATUS: Container initialized correctly" << std::endl;
+}
 
-const vector<Box> &BoxAndContainer::Container::getBoxes() const {
+const vector <BoxAndContainer::Box> &BoxAndContainer::Container::getBoxes() const {
     return boxes;
 }
 
-void BoxAndContainer::Container::setBoxes(const vector<Box> &boxes_) {
+void BoxAndContainer::Container::setBoxes(const vector <Box> &boxes_) {
     assert((!boxes.empty()) && "ERROR: array is empty");
     Container::boxes = boxes_;
 }
@@ -65,7 +69,7 @@ unsigned int BoxAndContainer::Container::boxesCount() {
 double BoxAndContainer::Container::boxesSumWeight() {
     double boxesSumWeight = 0;
     for (Box box: boxes) {
-        boxesSumWeight += box.weight;
+        boxesSumWeight += box.getWeight();
     }
     return boxesSumWeight;
 }
@@ -73,45 +77,46 @@ double BoxAndContainer::Container::boxesSumWeight() {
 double BoxAndContainer::Container::boxesSumValue() {
     int boxesSumValue = 0;
     for (Box box: boxes) {
-        boxesSumValue += box.value;
+        boxesSumValue += box.getValue();
     }
     return boxesSumValue;
 }
 
-Box BoxAndContainer::Container::getBoxByIndex(int i) {
+BoxAndContainer::Box BoxAndContainer::Container::getBoxByIndex(int i) {
     return boxes[i];
 }
 
-void BoxAndContainer::Container::addBox(Box box) {
-    if (boxesSumWeight() + box.weight > maxWeight) {
+void BoxAndContainer::Container::addBox(BoxAndContainer::Box box) {
+    cout << "STATUS: addBox function invoked..." << endl;
+    if (boxesSumWeight() + box.getWeight() > maxWeight) {
         throw ContainerOverweightException("Overweight exception: Box is too heavy to be added to the container!");
     }
     boxes.push_back(box);
 }
 
-Box BoxAndContainer::Container::operator[](int i) const{
+BoxAndContainer::Box BoxAndContainer::Container::operator[](int i) const {
     return boxes[i];
 }
 
-ostream &operator<<(ostream &out, const BoxAndContainer::Container &container) {
-out << "Height: " << container.getHeight() << ", width:" << container.getWidth() << ", length: "
-    << container.getLength() << ", maxWeight:" << container.getMaxWeight() << endl;
-return out;
+ostream &BoxAndContainer::operator<<(ostream &out, const BoxAndContainer::Container &container) {
+    out << "Height: " << container.getHeight() << ", width:" << container.getWidth() << ", length: "
+        << container.getLength() << ", maxWeight:" << container.getMaxWeight() << endl;
+    return out;
 }
 
-istream &operator>>(istream &in, BoxAndContainer::Container &container) {
-int height, width, length, maxWeight;
-cout << "height: ";
-in >> height;
-container.setHeight(height);
-cout << "width: ";
-in >> width;
-container.setWidth(width);
-cout << "length: ";
-in >> length;
-container.setLength(length);
-cout << "maxWeight: ";
-in >> maxWeight;
-container.setMaxWeight(maxWeight);
-return in;
+istream &BoxAndContainer::operator>>(istream &in, BoxAndContainer::Container &container) {
+    int height, width, length, maxWeight;
+    cout << "height: ";
+    in >> height;
+    container.setHeight(height);
+    cout << "width: ";
+    in >> width;
+    container.setWidth(width);
+    cout << "length: ";
+    in >> length;
+    container.setLength(length);
+    cout << "maxWeight: ";
+    in >> maxWeight;
+    container.setMaxWeight(maxWeight);
+    return in;
 }

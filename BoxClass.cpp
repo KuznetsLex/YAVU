@@ -1,9 +1,15 @@
 #include "BoxClass.h"
+#include <iostream>
 
 BoxAndContainer::Box::Box() : length(0), width(0), height(0), weight(0), value(0) {}
 
-BoxAndContainer::Box::Box(int length, int width, int height, double weight, int value) : length(length), width(width), height(height),
-                                                                   weight(weight), value(value) {}
+BoxAndContainer::Box::Box(int length, int width, int height, double weight, int value) : length(length),
+                                                                                         width(width),
+                                                                                         height(height),
+                                                                                         weight(weight),
+                                                                                         value(value) {
+    std::cout << "STATUS: Box class initialized correctly" << std::endl;
+}
 
 int BoxAndContainer::Box::getLength() const {
     return length;
@@ -50,4 +56,29 @@ void BoxAndContainer::Box::setValue(int value_) {
     value = value_;
 }
 
+std::ostream &BoxAndContainer::operator<<(std::ostream &out, const BoxAndContainer::Box &box) {
+    out << "Height: " << box.getHeight() << ", width:" << box.getWidth() << ", length: " << box.getLength()
+        << ", weight: " << box.getWeight() << ", value: " << box.getValue() << std::endl;
+    return out;
+}
 
+std::istream &BoxAndContainer::operator>>(std::istream &in, BoxAndContainer::Box &box) {
+    int height, width, length, value;
+    double weight;
+    std::cout << "height: ";
+    in >> height;
+    box.setHeight(height);
+    std::cout << "width: ";
+    in >> width;
+    box.setWidth(width);
+    std::cout << "length: ";
+    in >> length;
+    box.setLength(length);
+    std::cout << "Weight: ";
+    in >> weight;
+    box.setWeight(weight);
+    std::cout << "Value: ";
+    in >> value;
+    box.setValue(value);
+    return in;
+}

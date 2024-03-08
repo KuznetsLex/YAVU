@@ -18,6 +18,7 @@ int main(int argc, const char** argv) {
     cout << maxWeightOfBoxes(boxes, BOXES_SIZE, 9) << endl;
     cout << ifBoxesInlinable(boxes, BOXES_SIZE) << endl;
     cout << "Are boxes equal?" << endl;
+    cout << box1;
     cout << (box1 == box2) << endl;
     cout << (box2 == box3) << endl;
     cout << (box1 == box3) << endl;
@@ -28,6 +29,16 @@ int main(int argc, const char** argv) {
 
     BoxAndContainer::Box box5(1,1,1,1,1);
     BoxAndContainer::Container container1(10,10,10,10);
+    container1.addBox(box5);
+    box5.setValue(2);
+    container1.boxesCount();
+    container1.addBox(box5);
+    container1.addBox(container1[0]);
+    cout << container1.boxesCount() << endl;
+    cout << container1.boxesSumWeight() << endl;
+    cout << container1.boxesSumValue() << endl;
+    cout << container1.getBoxByIndex(1) << endl;
+    cout << container1[0] << endl;
     delete[] boxes;
     return 0;
 }

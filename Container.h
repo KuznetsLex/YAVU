@@ -1,18 +1,18 @@
 #ifndef LAB0_CONTAINER_H
 #define LAB0_CONTAINER_H
 #include <iostream>
-#include "Box.h"
+#include "BoxClass.h"
 namespace BoxAndContainer {
     class Container
             {
     private:
-        std::vector<Box> boxes;
+        std::vector<BoxAndContainer::Box> boxes;
         int length, width, height;
         double maxWeight;
     public:
         Container(int length, int width, int height, double maxWeight);
-        const std::vector <Box> &getBoxes() const;
-        void setBoxes(const std::vector <Box> &boxes);
+        const std::vector <BoxAndContainer::Box> &getBoxes() const;
+        void setBoxes(const std::vector <BoxAndContainer::Box> &boxes);
         int getLength() const;
         void setLength(int length);
         int getWidth() const;

@@ -21,6 +21,9 @@ namespace BoxAndContainer{
         void setWeight(double weight);
         int getValue() const;
         void setValue(int value);
+        bool operator== (const Box &box) const;
     };
+    std::ostream & operator << (std::ostream &out, const BoxAndContainer::Box &box);
+    std::istream & operator >> (std::istream &in,  BoxAndContainer::Box &box);
 }
 #endif //LAB0_BOXCLASS_H
