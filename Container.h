@@ -25,7 +25,8 @@ namespace BoxAndContainer {
         double boxesSumWeight();
         double boxesSumValue();
         Box getBoxByIndex(int i);
-        void addBox(Box box);
+        unsigned long addBox(Box box);
+        void deleteBoxByIndex(int i);
 
         class ContainerOverweightException: public std::exception {
             const char* message;
