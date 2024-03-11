@@ -15,6 +15,10 @@ namespace BoxAndContainer {
                                                                                                  height(height),
                                                                                                  maxWeight(maxWeight) {
         std::cout << "STATUS: Container initialized correctly" << std::endl;
+        assert((length > 0) && "ERROR: Wrong input! Length should be positive.");
+        assert((width > 0) && "ERROR: Wrong input! Width should be positive.");
+        assert((height > 0) && "ERROR: Wrong input! Height should be positive.");
+        assert((maxWeight >= 0) && "ERROR: Wrong input! maxWeight should be positive.");
     }
 
     const vector <BoxAndContainer::Box> &BoxAndContainer::Container::getBoxes() const {
@@ -92,15 +96,16 @@ namespace BoxAndContainer {
             throw ContainerOverweightException("Overweight exception: Box is too heavy to be added to the container!");
         }
         boxes.push_back(box);
-//    return find(BoxAndContainer::Container::boxes.begin(), BoxAndContainer::Container::boxes.begin(), box) - boxes.begin();
         return boxes.size() - 1;
     }
 
     void BoxAndContainer::Container::deleteBoxByIndex(int i) {
+        assert((i >= 0) && "ERROR: Wrong input! Index should be nonnegative.");
         boxes.erase(boxes.begin()+i);
     }
 
     BoxAndContainer::Box BoxAndContainer::Container::operator[](int i) const {
+        assert((i >= 0) && "ERROR: Wrong input! Index should be nonnegative.");
         return boxes[i];
     }
 

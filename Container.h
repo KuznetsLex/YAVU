@@ -33,10 +33,6 @@ namespace BoxAndContainer {
         public:
             ContainerOverweightException(const char* theMessage): message(theMessage) { } const char* what() const noexcept { return message; }
         };
-
-//        friend std::ostream &operator<<(std::ostream &out, const Container &container);
-//        friend std::istream &operator>>(std::istream &in, Container &container);
-//        Box operator[](const Container &container, int i) const;
         Box operator[](int i) const;
     };
 

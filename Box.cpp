@@ -8,12 +8,12 @@ Box::Box(int inLength, int inWidth, int inHeight,
         double inWeight,
         int inValue): length(inLength), width(inWidth), height(inHeight), weight(inWeight), value(inValue)
     {
+        std::cout << "STATUS: Box initialized correctly" << std::endl;
         assert((inWeight > 0) && "ERROR: Wrong input! Weight should be positive.");
         assert((inLength > 0) && "ERROR: Wrong input! Length should be positive.");
         assert((inWidth > 0) && "ERROR: Wrong input! Width should be positive.");
         assert((inHeight > 0) && "ERROR: Wrong input! Height should be positive.");
         assert((inValue >= 0) && "ERROR: Wrong input! Value shouldn't be negative.");
-        std::cout << "STATUS: Box initialized correctly" << std::endl;
     }
 
 Box::Box(): length(0), width(0), height(0), weight(0), value(0){}
