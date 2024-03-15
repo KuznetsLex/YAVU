@@ -35,9 +35,9 @@ public:
 
     Vector &operator=(Vector &&other);
 
-    bool operator==(const Vector &vector);
+    bool operator==(const Vector &vector) const;
 
-    bool operator!=(const Vector &vector);
+    bool operator!=(const Vector &vector) const;
 
     class ComparedDifferentLengthException : public std::exception {
         const char *message;
@@ -47,19 +47,19 @@ public:
         const char *what() const noexcept { return message; }
     };
 
-    bool operator<(const Vector &vector);
+    bool operator<(const Vector &vector) const;
 
-    bool operator<=(const Vector &vector);
+    bool operator<=(const Vector &vector) const;
 
-    bool operator>(const Vector &vector);
+    bool operator>(const Vector &vector) const;
 
-    bool operator>=(const Vector &vector);
+    bool operator>=(const Vector &vector) const;
 
     Vector operator+(const Vector &vector) const;
 
     void reserve(size_t n);
 
-    size_t capacity();
+    size_t capacity() const;
 
     void pushBack(int x);
 
