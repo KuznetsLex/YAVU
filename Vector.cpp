@@ -2,7 +2,7 @@
 
 Vector::Vector(size_t size) : arr(new int[size]), len(size) {
     assert((arr != nullptr) && "ERROR: Arr is null");
-    assert((len > 0) && "ERROR: Len should be positive");
+    assert((size > 0) && "ERROR: Len should be positive");
     for (int i = 0; i < size; i++) {
         arr[i] = 0;
     }
@@ -10,7 +10,7 @@ Vector::Vector(size_t size) : arr(new int[size]), len(size) {
 
 Vector::Vector(size_t size, int n) : arr(new int[size]), len(size) {
     assert((arr != nullptr) && "ERROR: Arr is null");
-    assert((len > 0) && "ERROR: Len should be positive");
+    assert((size > 0) && "ERROR: Len should be positive");
     for (int i = 0; i < size; i++) {
         arr[i] = n;
     }
@@ -27,6 +27,15 @@ Vector::Vector(Vector const &vector) : arr(new int[vector.len]), len(vector.len)
 Vector::Vector(Vector &&vector) : arr(vector.arr), len(vector.len) {
     vector.arr = nullptr;
     vector.len = 0;
+}
+
+Vector::Vector(size_t size, size_t capacity, int n) : arr(new int[size]), len(size), capacityValue(capacity) {
+    assert((arr != nullptr) && "ERROR: Arr is null");
+    assert((size > 0) && "ERROR: Len should be positive");
+    assert((capacity > 0) && "ERROR: Capacity should be positive");
+    for (int i = 0; i < size; i++) {
+        arr[i] = n;
+    }
 }
 
 Vector::~Vector() {
@@ -52,20 +61,31 @@ int *Vector::getArr() const {
 
 int &Vector::operator[](int i) const {
     assert((i >= 0) && "ERROR: Wrong input! Index should be nonnegative.");
+    assert((i < len) && "ERROR: Index out of bound");
     return arr[i];
 }
 
 void Vector::resize(size_t newSize) {
-    int *newArr = new int[newSize];
-    for (int i = 0; i < newSize; i++) {
-        if (i < len) {
-            newArr[i] = arr[i];
-        } else {
-            newArr[i] = 0;
+    //  блок if - старый resize; вместе с блоком else - новый resize
+    if (newSize > len + capacityValue) {
+        int *newArr = new int[newSize];
+        for (int i = 0; i < newSize; i++) {
+            if (i < len) {
+                newArr[i] = arr[i];
+            } else {
+                newArr[i] = 0;
+            }
+        }
+        delete[] arr;
+        arr = newArr;
+    } else {
+        capacityValue -= (newSize - len);
+        for (int i = 0; i < newSize; i++) {
+            if (i >= len) {
+                arr[i] = 0;
+            }
         }
     }
-    delete[] arr;
-    arr = newArr;
     len = newSize;
 }
 
@@ -155,6 +175,31 @@ Vector Vector::operator+(const Vector &vector) const {
         }
     }
     return sumVector;
+}
+
+void Vector::reserve(size_t n) {
+    int *newArr = new int[len + n];
+    for (int i = 0; i < len; i++) {
+        newArr[i] = arr[i];
+    }
+    delete[] arr;
+    arr = newArr;
+    capacityValue = n;
+}
+
+size_t Vector::capacity() {
+    return capacityValue;
+}
+
+void Vector::pushBack(int x) {
+    resize(len + 1);
+    arr[len - 1] = x;
+}
+
+int Vector::popBack() {
+    int returnValue = arr[len - 1];
+    resize(len - 1);
+    return returnValue;
 }
 
 std::ostream &operator<<(std::ostream &out, const Vector &vector) {

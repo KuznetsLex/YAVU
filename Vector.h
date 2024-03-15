@@ -7,6 +7,7 @@ class Vector {
 private:
     int *arr;
     size_t len;
+    size_t capacityValue = 0;
 public:
     explicit Vector(size_t size = 10);
 
@@ -15,6 +16,8 @@ public:
     Vector(Vector const &vector);
 
     Vector(Vector &&vector);
+
+    Vector(size_t size, size_t capacity, int n);
 
     ~Vector();
 
@@ -53,6 +56,14 @@ public:
     bool operator>=(const Vector &vector);
 
     Vector operator+(const Vector &vector) const;
+
+    void reserve(size_t n);
+
+    size_t capacity();
+
+    void pushBack(int x);
+
+    int popBack();
 };
 
 std::istream &operator>>(std::istream &in, Vector &vector);
