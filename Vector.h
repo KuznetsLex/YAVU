@@ -66,8 +66,8 @@ public:
     int popBack();
 };
 
-std::istream &operator>>(std::istream &in, Vector &vector);
+std::istream &operator>>(std::istream &in, Vector *vector);
 
-std::ostream &operator<<(std::ostream &out, const Vector &vector);
+std::ostream &operator<<(std::ostream &out, const Vector *vector);
 
 #endif

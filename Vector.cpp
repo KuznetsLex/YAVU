@@ -17,16 +17,18 @@ Vector::Vector(size_t size, int n) : arr(new int[size]), len(size) {
 }
 
 Vector::Vector(Vector const &vector) : arr(new int[vector.len]), len(vector.len) {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: Len should be nonnegative");
+//    assert((vector.len >= 0) && "ERROR: Len should be nonnegative");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+    assert((&vector != nullptr)&& "Vector is garbage");
     for (int i = 0; i < len; i++) {
         arr[i] = vector.arr[i];
     }
 }
 
 Vector::Vector(Vector &&vector) : arr(vector.arr), len(vector.len) {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: Len should be positive");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: Len should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     vector.arr = nullptr;
     vector.len = 0;
 }
@@ -54,11 +56,16 @@ void Vector::setLen(size_t len_) {
 }
 
 int *Vector::getArr() const {
-    int *copyArr = new int[len];
-    for (int i = 0; i < len; i++) {
-        copyArr[i] = arr[i];
+    try {
+        int *copyArr = new int[len];
+        for (int i = 0; i < len; i++) {
+            copyArr[i] = arr[i];
+        }
+        return copyArr;
     }
-    return copyArr;
+    catch(std::bad_alloc e) {
+        throw e;
+    }
 }
 
 int &Vector::operator[](int i) const {
@@ -70,31 +77,37 @@ int &Vector::operator[](int i) const {
 void Vector::resize(size_t newSize) {
     assert((newSize > 0) && "ERROR: length should be positive");
     //  блок if - старый resize; вместе с блоком else - новый resize
-    if (newSize > len + capacityValue) {
-        int *newArr = new int[newSize];
-        for (int i = 0; i < newSize; i++) {
-            if (i < len) {
-                newArr[i] = arr[i];
-            } else {
-                newArr[i] = 0;
+    try {
+        if (newSize > len + capacityValue) {
+            int *newArr = new int[newSize];
+            for (int i = 0; i < newSize; i++) {
+                if (i < len) {
+                    newArr[i] = arr[i];
+                } else {
+                    newArr[i] = 0;
+                }
+            }
+            delete[] arr;
+            arr = newArr;
+        } else {
+            capacityValue -= (newSize - len);
+            for (int i = 0; i < newSize; i++) {
+                if (i >= len) {
+                    arr[i] = 0;
+                }
             }
         }
-        delete[] arr;
-        arr = newArr;
-    } else {
-        capacityValue -= (newSize - len);
-        for (int i = 0; i < newSize; i++) {
-            if (i >= len) {
-                arr[i] = 0;
-            }
-        }
+        len = newSize;
     }
-    len = newSize;
+    catch(std::bad_alloc e) {
+        throw e;
+    }
 }
 
 Vector &Vector::operator=(Vector &&other) {
-    assert((other.arr != nullptr) && "ERROR: Arr is null");
-    assert((other.len >= 0) && "ERROR: length should be positive");
+//    assert((other.arr != nullptr) && "ERROR: Arr is null");
+//    assert((other.len >= 0) && "ERROR: length should be positive");
+    assert((&other != nullptr)&& "Vector is garbage");
     if (this == &other) { return *this; }
     std::swap(arr, other.arr);
     std::swap(len, other.len);
@@ -102,8 +115,9 @@ Vector &Vector::operator=(Vector &&other) {
 }
 
 Vector &Vector::operator=(const Vector &vector) {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     if (this == &vector) { return *this; }
     Vector copy(vector);
     std::swap(arr, copy.arr);
@@ -112,8 +126,9 @@ Vector &Vector::operator=(const Vector &vector) {
 }
 
 bool Vector::operator==(const Vector &vector) const {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     if (len != vector.len) { throw ComparedDifferentLengthException("ERROR: Compared vectors have different length!"); }
     for (int i = 0; i < len; i++) {
         if (arr[i] != vector.arr[i]) { return false; }
@@ -122,24 +137,23 @@ bool Vector::operator==(const Vector &vector) const {
 }
 
 bool Vector::operator!=(const Vector &vector) const {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
-//    if (len != vector.len) { throw ComparedDifferentLengthException("ERROR: Compared vectors have different length!"); }
-//    for (int i = 0; i < len; i++) {
-//        if (arr[i] != vector.arr[i]) { return true; }
-//    }
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     return !(vector == *this);
 }
 
 bool Vector::operator<(const Vector &vector) const {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     return !(*this >= vector);
 }
 
 bool Vector::operator<=(const Vector &vector) const {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     if (len == vector.len) {
         if (vector == *this) { return true; }
     }
@@ -154,14 +168,16 @@ bool Vector::operator<=(const Vector &vector) const {
 }
 
 bool Vector::operator>(const Vector &vector) const {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     return !(*this <= vector);
 }
 
 bool Vector::operator>=(const Vector &vector) const {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
     if (len == vector.len) {
         if (vector == *this) { return true; }
     }
@@ -176,8 +192,9 @@ bool Vector::operator>=(const Vector &vector) const {
 }
 
 Vector Vector::operator+(const Vector &vector) const {
-    assert((vector.arr != nullptr) && "ERROR: Arr is null");
-    assert((vector.len >= 0) && "ERROR: length should be positive");
+    assert((&vector != nullptr)&& "Vector is garbage");
+//    assert((vector.arr != nullptr) && "ERROR: Arr is null");
+//    assert((vector.len >= 0) && "ERROR: length should be positive");
     Vector newVector(0);
 
     for (int i = 0; i < len; i++) {
@@ -191,13 +208,17 @@ Vector Vector::operator+(const Vector &vector) const {
 
 void Vector::reserve(size_t n) {
     assert((n > 0) && "ERROR: reserved space should be positive");
-    int *newArr = new int[len + n];
-    for (int i = 0; i < len; i++) {
-        newArr[i] = arr[i];
+    try {
+        int *newArr = new int[len + n];
+        for (int i = 0; i < len; i++) {
+            newArr[i] = arr[i];
+        }
+        delete[] arr;
+        arr = newArr;
+        capacityValue = n;
+    } catch(std::bad_alloc e) {
+        throw e;
     }
-    delete[] arr;
-    arr = newArr;
-    capacityValue = n;
 }
 
 size_t Vector::capacity() const {
@@ -215,29 +236,31 @@ int Vector::popBack() {
     return returnValue;
 }
 
-std::ostream &operator<<(std::ostream &out, const Vector &vector) {
-    assert((vector.getArr() != nullptr) && "ERROR: Arr is null");
-    assert((vector.getLen() >= 0) && "ERROR: Len should be nonnegative");
-    out << "Length: " << vector.getLen() << "; ";
+std::ostream &operator<<(std::ostream &out, const Vector *vector) {
+//    assert((vector.getArr() != nullptr) && "ERROR: Arr is null");
+//    assert((vector.getLen() >= 0) && "ERROR: Len should be nonnegative");
+    assert((&vector != nullptr)&& "Vector is garbage");
+    out << "Length: " << (*vector).getLen() << "; ";
     out << "Elems: ";
-    for (int i = 0; i < vector.getLen(); i++) {
-        out << i << ": " << vector[i] << ", ";
+    for (int i = 0; i < (*vector).getLen(); i++) {
+        out << i << ": " << (*vector)[i] << ", ";
     }
     out << std::endl;
     return out;
 }
 
-std::istream &operator>>(std::istream &in, Vector &vector) {
+std::istream &operator>>(std::istream &in, Vector *vector) {
+    assert((&vector != nullptr)&& "Vector is garbage");
     size_t len;
     int elem;
     std::cout << "len: ";
     in >> len;
-    vector.setLen(len);
-    vector.resize(len);
+    (*vector).setLen(len);
+    (*vector).resize(len);
     for (int i = 0; i < len; i++) {
         std::cout << "elem " << i << ": ";
         in >> elem;
-        vector[i] = elem;
+        (*vector)[i] = elem;
     }
     return in;
 }
