@@ -1,54 +1,78 @@
 #include "Vector.h"
 
-Vector::Vector(size_t size) : arr(new int[size]), len(size) {
-    assert((arr != nullptr) && "ERROR: Arr is null");
+Vector::Vector(size_t size) try {
     assert((size >= 0) && "ERROR: Len should be nonnegative");
+    arr = new int[size];
+    len = size;
     for (int i = 0; i < size; i++) {
         arr[i] = 0;
     }
 }
+catch(std::bad_alloc e) {
+    len = 0;
+    throw e;
+}
 
-Vector::Vector(size_t size, int n) : arr(new int[size]), len(size) {
-    assert((arr != nullptr) && "ERROR: Arr is null");
+Vector::Vector(size_t size, int n) try {
     assert((size >= 0) && "ERROR: Len should be nonnegative");
+    arr = new int[size];
+    len = size;
     for (int i = 0; i < size; i++) {
         arr[i] = n;
     }
 }
+catch(std::bad_alloc e) {
+    len = 0;
+    throw e;
+}
 
-Vector::Vector(Vector const &vector) : arr(new int[vector.len]), len(vector.len) {
+Vector::Vector(Vector const &vector) try {
 //    assert((vector.len >= 0) && "ERROR: Len should be nonnegative");
 //    assert((vector.arr != nullptr) && "ERROR: Arr is null");
     assert((&vector != nullptr)&& "Vector is garbage");
+    arr = new int[vector.len];
+    len = vector.len;
     for (int i = 0; i < len; i++) {
-        arr[i] = vector.arr[i];
+        arr[i] = vector.getArr()[i];
     }
 }
+catch(std::bad_alloc e) {
+    len = 0;
+    throw e;
+}
 
-Vector::Vector(Vector &&vector) : arr(vector.arr), len(vector.len) {
+Vector::Vector(Vector &&vector) {
 //    assert((vector.arr != nullptr) && "ERROR: Arr is null");
 //    assert((vector.len >= 0) && "ERROR: Len should be positive");
     assert((&vector != nullptr)&& "Vector is garbage");
+    arr = vector.arr;
+    len = vector.len;
     vector.arr = nullptr;
     vector.len = 0;
 }
 
-Vector::Vector(size_t size, size_t capacity, int n) : arr(new int[size]), len(size), capacityValue(capacity) {
+Vector::Vector(size_t size, size_t capacity, int n) try {
     assert((arr != nullptr) && "ERROR: Arr is null");
     assert((size >= 0) && "ERROR: Len should be positive");
     assert((capacity > 0) && "ERROR: Capacity should be positive");
+    len = size;
+    capacityValue = capacity;
+    arr = new int[size];
     for (int i = 0; i < size; i++) {
         arr[i] = n;
     }
+}
+catch(std::bad_alloc e) {
+    throw e;
 }
 
 Vector::~Vector() {
     delete[] arr;
 }
 
-size_t Vector::getLen() const {
-    return len;
-}
+//size_t Vector::getLen() const {
+//    return len;
+//}
 
 void Vector::setLen(size_t len_) {
     assert((len_ >= 0) && "ERROR: length should be positive");
@@ -235,32 +259,32 @@ int Vector::popBack() {
     resize(len - 1);
     return returnValue;
 }
-
-std::ostream &operator<<(std::ostream &out, const Vector *vector) {
-//    assert((vector.getArr() != nullptr) && "ERROR: Arr is null");
-//    assert((vector.getLen() >= 0) && "ERROR: Len should be nonnegative");
-    assert((&vector != nullptr)&& "Vector is garbage");
-    out << "Length: " << (*vector).getLen() << "; ";
-    out << "Elems: ";
-    for (int i = 0; i < (*vector).getLen(); i++) {
-        out << i << ": " << (*vector)[i] << ", ";
-    }
-    out << std::endl;
-    return out;
-}
-
-std::istream &operator>>(std::istream &in, Vector *vector) {
-    assert((&vector != nullptr)&& "Vector is garbage");
-    size_t len;
-    int elem;
-    std::cout << "len: ";
-    in >> len;
-    (*vector).setLen(len);
-    (*vector).resize(len);
-    for (int i = 0; i < len; i++) {
-        std::cout << "elem " << i << ": ";
-        in >> elem;
-        (*vector)[i] = elem;
-    }
-    return in;
-}
+//
+//std::ostream &operator<<(std::ostream &out, const Vector *vector) {
+////    assert((vector.getArr() != nullptr) && "ERROR: Arr is null");
+////    assert((vector.getLen() >= 0) && "ERROR: Len should be nonnegative");
+//    assert((&vector != nullptr)&& "Vector is garbage");
+//    out << "Length: " << (*vector).getLen() << "; ";
+//    out << "Elems: ";
+//    for (int i = 0; i < (*vector).getLen(); i++) {
+//        out << i << ": " << (*vector)[i] << ", ";
+//    }
+//    out << std::endl;
+//    return out;
+//}
+//
+//std::istream &operator>>(std::istream &in, Vector *vector) {
+//    assert((&vector != nullptr)&& "Vector is garbage");
+//    size_t len;
+//    int elem;
+//    std::cout << "len: ";
+//    in >> len;
+//    (*vector).setLen(len);
+//    (*vector).resize(len);
+//    for (int i = 0; i < len; i++) {
+//        std::cout << "elem " << i << ": ";
+//        in >> elem;
+//        (*vector)[i] = elem;
+//    }
+//    return in;
+//}
