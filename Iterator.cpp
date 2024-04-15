@@ -1,6 +1,6 @@
 #include "Iterator.h"
 
-Iterator::Iterator(const BufferedRingQueue *rb) {
+Iterator::Iterator(const BufferedRingQueue<T> *rb) {
     assert((rb != nullptr) && "Assertion failed: queue is null");
     bufferedRingQueue = rb;
     currentIndex = bufferedRingQueue->getHead();

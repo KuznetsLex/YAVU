@@ -3,13 +3,14 @@
 
 #include "BufferedRingQueue.h"
 
+template<typename T>
 class Iterator {
 private:
-    const BufferedRingQueue* bufferedRingQueue;
+    const BufferedRingQueue<T>* bufferedRingQueue;
     int currentIndex;
     bool isEnd;
 public:
-    explicit Iterator(const BufferedRingQueue *rb);
+    explicit Iterator(const BufferedRingQueue<T> *rb);
     void start();
     void next();
     bool finish() const;
