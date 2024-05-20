@@ -28,11 +28,11 @@ public:
 
     bool areAllPositive();
 
-    std::vector<int> deleteLeaves();
+    std::vector<int>& deleteLeaves();
 
     double arithmeticMean();
 
-    int* find(int x);
+    std::vector<int>& find(int x);
 };
 
 std::ostream &operator<<(std::ostream &out, BinaryTree *tree);

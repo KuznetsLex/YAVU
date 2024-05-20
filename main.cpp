@@ -9,7 +9,7 @@ int main() {
     tree1.insert(5, std::vector<int> {0,1});
     tree1.insert(6, std::vector<int> {1,0});
     tree1.insert(7, std::vector<int> {1,1});
-    tree1.insert(8, std::vector<int> {1,1,1});
+    tree1.insert(8, std::vector<int> {0,1,1});
     std::cout << "tree1: " << &tree1 << std::endl;
     std::cout << "tree1 evenCount: " << tree1.evenCount() << std::endl;
     std::cout << "tree1 areAllPositive: " << tree1.areAllPositive() << std::endl;
@@ -21,5 +21,10 @@ int main() {
     }
     std::cout << std::endl;
     std::cout << "tree1: " << &tree1 << std::endl;
+    std::cout << "tree1 find(7): ";
+    std::vector<int> sequence1 = tree1.find(1);
+    for (int i = 0; i < sequence1.size(); i++) {
+        std::cout << sequence1[i] << " ";
+    }
     return 0;
 }

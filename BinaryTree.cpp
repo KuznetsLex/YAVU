@@ -135,7 +135,7 @@ void deleteLeavesWrapper(TreeElem* theRoot, std::vector<int>* cutArray) {
     deleteLeavesWrapper(theRoot -> right, cutArray);
 }
 
-std::vector<int> BinaryTree::deleteLeaves() {
+std::vector<int>& BinaryTree::deleteLeaves() {
     auto* cutArray = new std::vector<int>();
     deleteLeavesWrapper(root, cutArray);
     return *cutArray;
@@ -158,8 +158,31 @@ double BinaryTree::arithmeticMean() {
     return (double)(*sum)/(*counter);
 }
 
-int *BinaryTree::find(int x) {
-    return nullptr;
+bool findWrapper(TreeElem* root, std::vector<int>& sequence, int x)
+{
+    if (!root)
+        return false;
+    if (root->info == x)
+        return true;
+    if (findWrapper(root->left, sequence, x)) {
+        sequence.push_back(0);
+        return true;
+    }
+    else if (findWrapper(root->right, sequence, x)) {
+        sequence.push_back(1);
+        return true;
+    }
+    return false;
+}
+
+std::vector<int>& BinaryTree::find(int x) {
+    auto* sequence = new std::vector<int>();
+    findWrapper(root, *sequence, x);
+    std::reverse(sequence->begin(), sequence->end());
+    if (sequence->size() == 0 && root->info != x) {
+        sequence->push_back(-1);
+    }
+    return *sequence;
 }
 
 TreeElem* BinaryTree::getRoot() const {
