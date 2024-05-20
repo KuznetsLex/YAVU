@@ -22,9 +22,12 @@ int main() {
     std::cout << std::endl;
     std::cout << "tree1: " << &tree1 << std::endl;
     std::cout << "tree1 find(7): ";
-    std::vector<int> sequence1 = tree1.find(1);
+    std::vector<int> sequence1 = tree1.find(7);
     for (int i = 0; i < sequence1.size(); i++) {
         std::cout << sequence1[i] << " ";
     }
+    std::cout << std::endl;
+    BinaryTree tree2(tree1);
+    std::cout << "tree2: " << &tree2 << std::endl;
     return 0;
 }

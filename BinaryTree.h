@@ -12,15 +12,13 @@ private:
 public:
     explicit BinaryTree(int rootElem);
 
-    BinaryTree(BinaryTree &treeOrig);
-
-    BinaryTree(BinaryTree&& treeOrig) noexcept ;
+    BinaryTree(BinaryTree const &treeOrig);
 
     TreeElem* getRoot() const;
 
     ~BinaryTree();
 
-    BinaryTree &operator=(BinaryTree &treeOrig);
+    BinaryTree &operator=(BinaryTree const &treeOrig);
 
     int insert(int x, const std::vector<int>& sequence);
 

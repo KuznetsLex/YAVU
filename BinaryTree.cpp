@@ -1,88 +1,6 @@
 #include <iostream>
 #include "BinaryTree.h"
 
-BinaryTree::BinaryTree(int rootElem) {
-    root = new TreeElem(rootElem);
-}
-
-void clearElems(TreeElem* root) {
-    if (!root) return;
-    clearElems(root -> left); clearElems(root -> right); delete root;
-}
-
-void clear(TreeElem*& root) {
-    clearElems(root);
-    root = nullptr;
-}
-
-BinaryTree::~BinaryTree() {
-    clear(root);
-}
-
-TreeElem* copyTree(const TreeElem* root) {
-    if (!root) { return nullptr; }
-    auto* rootCopy = new TreeElem(root -> info); try {
-        rootCopy -> left = copyTree(root -> left);
-        rootCopy -> right = copyTree(root -> right);
-        return rootCopy;
-    } catch (std::bad_alloc &e) {
-        clear(rootCopy);
-        throw;
-    }
-}
-
-BinaryTree::BinaryTree(BinaryTree &treeOrig) {
-    root = new TreeElem(treeOrig.root->info);
-    copyTree(root);
-}
-
-BinaryTree &BinaryTree::operator=(BinaryTree &treeOrig) {
-    assert((&treeOrig != nullptr)&& "LinkedList is garbage");
-    if (this == &treeOrig) { return *this; }
-    BinaryTree copy(treeOrig);
-    std::swap(root, copy.root);
-    return *this;
-}
-
-int BinaryTree::insert(int x, const std::vector<int>& sequence) {
-    TreeElem* curNode = root;
-    for (int i = 0; i < sequence.size(); i++) {
-        if (sequence[i] == 0) {
-            if (curNode->left == nullptr) {
-                if (i == sequence.size() - 1) {
-                    auto * newNode = new TreeElem(x);
-                    curNode->left = newNode;
-                    return 0;
-                } else {
-                    return -1;
-                }
-            } else {
-                curNode = curNode->left;
-                if (i == sequence.size() - 1) {
-                    curNode->info = x;
-                }
-            }
-        }
-        if (sequence[i] == 1) {
-            if (curNode->right == nullptr) {
-                if (i == sequence.size() - 1) {
-                    auto * newNode = new TreeElem(x);
-                    curNode->right = newNode;
-                    return 0;
-                } else {
-                    return -1;
-                }
-            } else {
-                curNode = curNode->right;
-                if (i == sequence.size() - 1) {
-                    curNode->info = x;
-                }
-            }
-        }
-    }
-    return -2;
-}
-
 void evenCountWrapper(const TreeElem* theRoot, int* counter) {
     if (!theRoot) {
         return;
@@ -179,7 +97,7 @@ std::vector<int>& BinaryTree::find(int x) {
     auto* sequence = new std::vector<int>();
     findWrapper(root, *sequence, x);
     std::reverse(sequence->begin(), sequence->end());
-    if (sequence->size() == 0 && root->info != x) {
+    if (sequence->empty() && root->info != x) {
         sequence->push_back(-1);
     }
     return *sequence;
@@ -201,4 +119,85 @@ std::ostream &operator<<(std::ostream &out, BinaryTree *tree)
 {
     printLeftRight(out, tree->getRoot());
     return out;
+}
+
+BinaryTree::BinaryTree(int rootElem) {
+    root = new TreeElem(rootElem);
+}
+
+void clearElems(TreeElem* root) {
+    if (!root) return;
+    clearElems(root -> left); clearElems(root -> right); delete root;
+}
+
+void clear(TreeElem*& root) {
+    clearElems(root);
+    root = nullptr;
+}
+
+BinaryTree::~BinaryTree() {
+    clear(root);
+}
+
+TreeElem* copyTreeByRoot(const TreeElem* root) {
+    if (!root) { return nullptr; }
+    auto* rootCopy = new TreeElem(root -> info); try {
+        rootCopy -> left = copyTreeByRoot(root -> left);
+        rootCopy -> right = copyTreeByRoot(root -> right);
+        return rootCopy;
+    } catch (std::bad_alloc &e) {
+        clear(rootCopy);
+        throw;
+    }
+}
+
+BinaryTree::BinaryTree(BinaryTree const &treeOrig) {
+    root = copyTreeByRoot(treeOrig.root);
+}
+
+BinaryTree &BinaryTree::operator=(BinaryTree const &treeOrig) {
+    assert((&treeOrig != nullptr)&& "LinkedList is garbage");
+    if (this == &treeOrig) { return *this; }
+    BinaryTree copy(treeOrig);
+    std::swap(root, copy.root);
+    return *this;
+}
+
+int BinaryTree::insert(int x, const std::vector<int>& sequence) {
+    TreeElem* curNode = root;
+    for (int i = 0; i < sequence.size(); i++) {
+        if (sequence[i] == 0) {
+            if (curNode->left == nullptr) {
+                if (i == sequence.size() - 1) {
+                    auto * newNode = new TreeElem(x);
+                    curNode->left = newNode;
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else {
+                curNode = curNode->left;
+                if (i == sequence.size() - 1) {
+                    curNode->info = x;
+                }
+            }
+        }
+        if (sequence[i] == 1) {
+            if (curNode->right == nullptr) {
+                if (i == sequence.size() - 1) {
+                    auto * newNode = new TreeElem(x);
+                    curNode->right = newNode;
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else {
+                curNode = curNode->right;
+                if (i == sequence.size() - 1) {
+                    curNode->info = x;
+                }
+            }
+        }
+    }
+    return -2;
 }
