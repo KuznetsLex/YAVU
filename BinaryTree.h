@@ -10,7 +10,7 @@ private:
     TreeElem* root;
 
 public:
-    explicit BinaryTree(int rootElem);
+    explicit BinaryTree(int rootElem = 0);
 
     BinaryTree(BinaryTree const &treeOrig);
 
@@ -31,6 +31,10 @@ public:
     double arithmeticMean();
 
     std::vector<int>& find(int x);
+
+    bool isBinarySearch(const TreeElem* theRoot);
+
+    void printByLevels(std::ostream &out, const TreeElem* root);
 };
 
 std::ostream &operator<<(std::ostream &out, BinaryTree *tree);

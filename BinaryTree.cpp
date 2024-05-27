@@ -1,6 +1,11 @@
 #include <iostream>
 #include "BinaryTree.h"
 
+// printTree название метода
+// конструктор по умолчанию
+// insert переписать
+
+
 void evenCountWrapper(const TreeElem* theRoot, int* counter) {
     if (!theRoot) {
         return;
@@ -107,17 +112,32 @@ TreeElem* BinaryTree::getRoot() const {
     return root;
 }
 
-void printLeftRight(std::ostream &out, const TreeElem* root)
+void printTreeLeftRight(std::ostream &out, const TreeElem* root)
 {
     if (!root) { return; }
-    printLeftRight(out, root -> left);
+    printTreeLeftRight(out, root -> left);
     out << root -> info << " ";
-    printLeftRight(out, root -> right);
+    printTreeLeftRight(out, root -> right);
+}
+
+void printByLevels(std::ostream &out, const TreeElem* root, int* tabsCount)
+{
+    if (!root) {
+        return;
+    }
+    for (int i = 0; i < *tabsCount; i++) { out << "\t"; }
+    out << root -> info << " " << std::endl;
+    (*tabsCount)++;
+    printByLevels(out, root -> left, tabsCount);
+    printByLevels(out, root -> right, tabsCount);
+    (*tabsCount)--;
 }
 
 std::ostream &operator<<(std::ostream &out, BinaryTree *tree)
 {
-    printLeftRight(out, tree->getRoot());
+    printTreeLeftRight(out, tree->getRoot());
+//    int* tabsCount = new int(0);
+//    printByLevels(out, tree->getRoot(), tabsCount);
     return out;
 }
 
@@ -141,12 +161,12 @@ BinaryTree::~BinaryTree() {
 
 TreeElem* copyTreeByRoot(const TreeElem* root) {
     if (!root) { return nullptr; }
-    auto* rootCopy = new TreeElem(root -> info); try {
+    try {
+        auto* rootCopy = new TreeElem(root -> info);
         rootCopy -> left = copyTreeByRoot(root -> left);
         rootCopy -> right = copyTreeByRoot(root -> right);
         return rootCopy;
     } catch (std::bad_alloc &e) {
-        clear(rootCopy);
         throw;
     }
 }
@@ -200,4 +220,35 @@ int BinaryTree::insert(int x, const std::vector<int>& sequence) {
         }
     }
     return -2;
+}
+
+bool isSubtreeLesser(const TreeElem* root, int value) {
+    if (!root) { return true; }
+    if ((root->info <= value)
+        && isSubtreeLesser(root->left, value)
+        && isSubtreeLesser(root->right, value))
+        return true;
+    else
+        return false;
+}
+
+bool isSubtreeGreater(const TreeElem* root, int value) {
+    if (!root) { return true; }
+    if ((root->info > value)
+        && isSubtreeGreater(root->left, value)
+        && isSubtreeGreater(root->right, value))
+        return true;
+    else
+        return false;
+}
+
+bool BinaryTree::isBinarySearch(const TreeElem* theRoot) {
+    if (!theRoot) { return true; }
+    if (isSubtreeLesser(theRoot->left, theRoot->info)
+        && isSubtreeGreater(theRoot->right, theRoot->info)
+        && isBinarySearch(theRoot->left)
+        && isBinarySearch(theRoot->right))
+        return true;
+    else
+        return false;
 }
